@@ -10,8 +10,10 @@ ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=eclipse-temurin:17.0.7_7-jre-alpine $JAVA_HOME $JAVA_HOME
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
-COPY --from=java /app/target/demo-0.0.1-SNAPSHOT.jar /app.jar
-RUN chmod +x /app.jar
+WORKDIR /webapp
+COPY --from=java /app/target/demo-0.0.1-SNAPSHOT.jar ./app.jar
+RUN chmod +x ./app.jar
+RUN mkdir uploads
 
 EXPOSE 3002
-CMD ["java", "-jar", "/app.jar"]
+CMD ["java", "-jar", "/webapp/app.jar"]

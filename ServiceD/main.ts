@@ -7,7 +7,7 @@ collectDefaultMetrics({ register: registry });
 
 // @deno-types="npm:@types/express@4.17.15"
 import express from "npm:express@4.18.2";
-
+// @deno-types="npm:@types/express-actuator@1.8.0"
 import actuator from "npm:express-actuator@1.8.2";
 import api_express_exporter from "npm:api-express-exporter@1.0.0";
 import multer from "npm:multer@1.4.5-lts.1";

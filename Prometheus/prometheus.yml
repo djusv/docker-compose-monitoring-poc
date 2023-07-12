@@ -12,9 +12,10 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets:
-        - node-app:3001
-        - java-app:3002
-        - deno-app:3003
+        - node-app-express:3001
+        - java-app-spring:3002
+        - deno-app-oak:3003
+        - deno-app-express:3004
   - job_name: 'cadvisor'
     metrics_path: '/metrics'
     # Override the global default and scrape targets from this job every 5 seconds.
