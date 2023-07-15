@@ -1,3 +1,5 @@
+const { Restaurant } = require("./models/restaurants/restaurant");
+
 const logger = require("./utils/logger");
 const morganMiddleware = require("./middlewares/morgan.middleware");
 
@@ -10,9 +12,20 @@ const api_express_exporter = require("api-express-exporter");
 const express = require('express');
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
+const bodyParser = require('body-parser');
+const db = require("./db");
+
 
 const app = express()
-const port = 3001
+const port = 3001;
+
+db.connect(app);
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.use(morganMiddleware);
 
@@ -36,6 +49,16 @@ app.use(actuator({
 
 app.get('/metadata', (req, res) => {
   res.status(200).json({ name: "serviceA" });
+})
+
+app.get('/restaurants', (req, res) => {
+  Restaurant.find()
+  .then(() => {
+    res.status(200);
+  })
+  .catch((e) => {
+    res.status(500);
+  });
 })
 
 app.use("/", express.static("./static", {etag: false}))

@@ -1,7 +1,7 @@
 FROM denoland/deno:alpine-1.35.0 as deno
 WORKDIR /app
 COPY ./ ./
-RUN deno compile --output ./deno-app --allow-all mod.ts -- -p 3003
+RUN deno compile --output ./deno-app --allow-all main.ts -- -p 3003
 
 FROM denoland/deno:alpine-1.35.0 AS web
 WORKDIR /webapp

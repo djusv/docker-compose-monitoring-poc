@@ -2,6 +2,8 @@ version: '3'
 networks:
   monitoring:
     driver: bridge
+  bff:
+    driver: bridge
 volumes:
     prometheus_data: {}
     grafana_data: {}
@@ -36,6 +38,32 @@ services:
       - ./grafana/config.monitoring
     networks:
       - monitoring
+
+  mongo:
+    restart: always
+    image: mongo:6.0.8
+    volumes:
+      - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./mongo/data:/data/db
+    networks:
+      - bff
+    expose:
+      - 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8008:8081
+  #   networks:
+  #     - bff
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: pass
+  #     ME_CONFIG_MONGODB_URL: mongodb://admin:pass@mongo:27017/
 
   cadvisor:
     image: google/cadvisor
@@ -72,37 +100,51 @@ services:
     build:
       context: ./ServiceA
       dockerfile: ./Dockerfile
+    depends_on:
+      - mongo
     ports:
       - 8080:3001
     networks:
       - monitoring
+      - bff
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/sample_db
 
-  java-app-spring:
-    container_name: java-app-spring
-    build:
-      context: ./ServiceB
-      dockerfile: ./Dockerfile
-    ports:
-      - 8081:3002
-    networks:
-      - monitoring
+  # java-app-spring:
+  #   container_name: java-app-spring
+  #   build:
+  #     context: ./ServiceB
+  #     dockerfile: ./Dockerfile
+  #   depends_on:
+  #     - mongo
+  #   ports:
+  #     - 8081:3002
+  #   networks:
+  #     - monitoring
+  #     - bff
 
-  deno-app-oak:
-    container_name: deno-app-oak
-    build:
-      context: ./ServiceC
-      dockerfile: ./Dockerfile
-    ports:
-      - 8082:3003
-    networks:
-      - monitoring
+  # deno-app-oak:
+  #   container_name: deno-app-oak
+  #   build:
+  #     context: ./ServiceC
+  #     dockerfile: ./Dockerfile
+  #   depends_on:
+  #     - mongo
+  #   ports:
+  #     - 8082:3003
+  #   networks:
+  #     - monitoring
+  #     - bff
 
-  deno-app-express:
-    container_name: deno-app-express
-    build:
-      context: ./ServiceD
-      dockerfile: ./Dockerfile
-    ports:
-      - 8083:3004
-    networks:
-      - monitoring
+  # deno-app-express:
+  #   container_name: deno-app-express
+  #   build:
+  #     context: ./ServiceD
+  #     dockerfile: ./Dockerfile
+  #   depends_on:
+  #     - mongo
+  #   ports:
+  #     - 8083:3004
+  #   networks:
+  #     - monitoring
+  #     - bff
