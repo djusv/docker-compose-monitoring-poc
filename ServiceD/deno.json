@@ -1,0 +1,13 @@
+{
+  "imports": {
+    "prom-client": "npm:prom-client@14.2.0",
+    "express": "npm:express@4.18.2",
+    "express-actuator": "npm:express-actuator@1.8.2",
+    "api-express-exporter": "npm:api-express-exporter@1.0.0",
+    "multer": "npm:multer@1.4.5-lts.1",
+    "jsonwebtoken": "npm:jsonwebtoken@9.0.1"
+  },
+  "tasks": {
+    "dev": "deno run --allow-all --watch main.ts"
+  }
+}

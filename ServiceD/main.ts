@@ -1,4 +1,7 @@
-import Client from "npm:prom-client@14.2.0";
+import { logger } from "./utils/logger.ts";
+import { morganMiddleware } from "./middlewares/morgan.middleware.ts";
+
+import Client from "prom-client";
 const registry = new Client.Registry();
 
 import { collectDefaultMetrics, metricsList } from "./defaultMetrics.ts";
@@ -6,18 +9,19 @@ import { collectDefaultMetrics, metricsList } from "./defaultMetrics.ts";
 collectDefaultMetrics({ register: registry });
 
 // @deno-types="npm:@types/express@4.17.15"
-import express from "npm:express@4.18.2";
+import express from "express";
 // @deno-types="npm:@types/express-actuator@1.8.0"
-import actuator from "npm:express-actuator@1.8.2";
-import api_express_exporter from "npm:api-express-exporter@1.0.0";
-import multer from "npm:multer@1.4.5-lts.1";
+import actuator from "express-actuator";
+import api_express_exporter from "api-express-exporter";
+import multer from "multer";
 // @deno-types="npm:@types/jsonwebtoken@latest"
-import jwt from "npm:jsonwebtoken@9.0.1";
+import jwt from "jsonwebtoken";
 
 const app = express();
 const port = 3004;
 const upload = multer({ dest: "./uploads" });
 
+app.use(morganMiddleware);
 app.use(api_express_exporter());
 app.use(express.json());
 
@@ -72,5 +76,5 @@ app.post('/jwt', (request, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  logger.info(`App listening on port ${port}`);
 });

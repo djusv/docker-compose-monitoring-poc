@@ -1,3 +1,6 @@
+const logger = require("./utils/logger");
+const morganMiddleware = require("./middlewares/morgan.middleware");
+
 const client = require('prom-client');
 const register = new client.Registry();
 client.collectDefaultMetrics({register});
@@ -10,6 +13,8 @@ const jwt = require("jsonwebtoken");
 
 const app = express()
 const port = 3001
+
+app.use(morganMiddleware);
 
 const upload = multer({ dest: "./uploads" });
 
@@ -66,5 +71,5 @@ app.post('/jwt', (request, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  logger.info(`App listening on port ${port}`);
 })
