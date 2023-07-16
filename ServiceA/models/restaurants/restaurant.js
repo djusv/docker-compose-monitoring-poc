@@ -1,60 +1,66 @@
 const mongoose = require('mongoose');
 
-const Restaurant = mongoose.model('Restaurant', {
+const schema = new mongoose.Schema({
   "id": {
-    "type": "Number"
+    "type": Number,
+    "unique": true
   },
   "name": {
-    "type": "String"
+    "type": String
   },
   "neighborhood": {
-    "type": "String"
+    "type": String
   },
   "photograph": {
-    "type": "String"
+    "type": String
   },
   "address": {
-    "type": "String"
+    "type": String
   },
   "latlng": {
     "lat": {
-      "type": "Number"
+      "type": Number
     },
     "lng": {
-      "type": "Number"
+      "type": Number
     }
   },
   "cuisine_type": {
-    "type": "String"
+    "type": String
   },
   "operating_hours": {
     "Monday": {
-      "type": "String"
+      "type": String
     },
     "Tuesday": {
-      "type": "String"
+      "type": String
     },
     "Wednesday": {
-      "type": "String"
+      "type": String
     },
     "Thursday": {
-      "type": "String"
+      "type": String
     },
     "Friday": {
-      "type": "String"
+      "type": String
     },
     "Saturday": {
-      "type": "String"
+      "type": String
     },
     "Sunday": {
-      "type": "String"
+      "type": String
     }
   },
-  "reviews": {
-    "type": [
-      "Mixed"
-    ]
-  }
+  "reviews": [
+    {
+      "name": String,
+      "data": String,
+      "rating": Number,
+      "comments": String
+    }
+  ]
 });
+
+const Restaurant = mongoose.model('Restaurant', schema);
 
 module.exports = {Restaurant};

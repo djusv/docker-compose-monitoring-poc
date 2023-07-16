@@ -4,6 +4,56 @@ print(
 
 db = db.getSiblingDB("sample_db");
 
+db.createUser(
+  {
+    user: "admin",
+    pwd: "pass",
+    roles: [ "readWrite", "dbAdmin" ]
+  }
+)
+
+db.createCollection("contacts");
+
+try {
+  db.contacts.insertMany(
+    [{
+      "id": 1,
+      "name": "Samwise Gamgee",
+    }, {
+      "id": 2,
+      "name": "Frodo Baggins",
+    }, {
+      "id": 3,
+      "name": "Bilbo Baggins",
+    }, {
+      "id": 4,
+      "name": "Aaragorn",
+    }, {
+      "id": 5,
+      "name": "Sauron",
+    }, {
+      "id": 6,
+      "name": "Gandalf",
+    }, {
+      "id": 7,
+      "name": "Legolas",
+    }, {
+      "id": 8,
+      "name": "Gollum",
+    }, {
+      "id": 9,
+      "name": "Gimli",
+    }, {
+      "id": 10,
+      "name": "Pippin Took",
+    }]
+  );
+} catch (e) {
+  print(e);
+}
+
+db = db.getSiblingDB("sample_db");
+
 db.createCollection("restaurants");
 
 try {

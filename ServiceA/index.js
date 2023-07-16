@@ -1,3 +1,4 @@
+const { Contact } = require("./models/contacts/contact");
 const { Restaurant } = require("./models/restaurants/restaurant");
 
 const logger = require("./utils/logger");
@@ -52,11 +53,27 @@ app.get('/metadata', (req, res) => {
 })
 
 app.get('/restaurants', (req, res) => {
+  logger.info("finding restaurants")
   Restaurant.find()
-  .then(() => {
-    res.status(200);
+  .then((restaurants) => {
+    logger.info("found")
+    res.status(200).json(restaurants);
   })
   .catch((e) => {
+    logger.info("error: "+e)
+    res.status(500);
+  });
+})
+
+app.get('/contacts', (req, res) => {
+  logger.info("finding contacts")
+  Contact.find()
+  .then((contacts) => {
+    logger.info("found")
+    res.status(200).json(contacts);
+  })
+  .catch((e) => {
+    logger.info("error: "+e)
     res.status(500);
   });
 })
@@ -93,6 +110,8 @@ app.post('/jwt', (request, res) => {
   });
 });
 
-app.listen(port, () => {
-  logger.info(`App listening on port ${port}`);
-})
+app.on("ready", () => {
+  app.listen(port, () => {
+    logger.info(`App listening on port ${port}`);
+  })
+});
