@@ -1,4 +1,4 @@
-import winston from "npm:winston@3.10.0";
+import winston from "winston";
 // Define your severity levels.
 // With them, You can create log files,
 // see or hide levels based on the running ENV.

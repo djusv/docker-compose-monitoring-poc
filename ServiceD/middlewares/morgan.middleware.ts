@@ -1,4 +1,4 @@
-import morgan from "npm:morgan@1.10.0";
+import morgan from "morgan";
 import { logger } from "../utils/logger.ts";
 
 const stream = {

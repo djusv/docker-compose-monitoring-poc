@@ -5,7 +5,10 @@
     "express-actuator": "npm:express-actuator@1.8.2",
     "api-express-exporter": "npm:api-express-exporter@1.0.0",
     "multer": "npm:multer@1.4.5-lts.1",
-    "jsonwebtoken": "npm:jsonwebtoken@9.0.1"
+    "jsonwebtoken": "npm:jsonwebtoken@9.0.1",
+    "mongoose": "npm:mongoose@7.3.4",
+    "morgan": "npm:morgan@1.10.0",
+    "winston": "npm:winston@3.10.0"
   },
   "tasks": {
     "dev": "deno run --allow-all --watch main.ts"

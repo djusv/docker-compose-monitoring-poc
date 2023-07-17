@@ -1,3 +1,7 @@
+import { Contact } from "./models/contacts/contact.ts";
+import { Restaurant } from "./models/restaurants/restaurant.ts";
+import { connect } from "./db/index.ts"
+
 import { logger } from "./utils/logger.ts";
 import { morganMiddleware } from "./middlewares/morgan.middleware.ts";
 
@@ -20,6 +24,8 @@ import jwt from "jsonwebtoken";
 const app = express();
 const port = 3004;
 const upload = multer({ dest: "./uploads" });
+
+connect(app);
 
 app.use(morganMiddleware);
 app.use(api_express_exporter());
@@ -75,6 +81,35 @@ app.post('/jwt', (request, res) => {
   })
 });
 
-app.listen(port, () => {
-  logger.info(`App listening on port ${port}`);
+app.get('/restaurants', (req, res) => {
+  logger.info("finding restaurants")
+  Restaurant.find()
+  .then((restaurants) => {
+    logger.info("found")
+    res.status(200).json(restaurants);
+  })
+  .catch((e) => {
+    logger.info("error: "+e)
+    res.status(500);
+  });
+})
+
+app.get('/contacts', (req, res) => {
+  logger.info("finding contacts")
+  Contact.find()
+  .then((contacts) => {
+    logger.info("found")
+    res.status(200).json(contacts);
+  })
+  .catch((e) => {
+    logger.info("error: "+e)
+    res.status(500);
+  });
+})
+
+
+app.on("ready", () => {
+  app.listen(port, () => {
+    logger.info(`App listening on port ${port}`);
+  });
 });
