@@ -1,6 +1,6 @@
 import { Contact } from "./models/contacts/contact.ts";
 import { Restaurant } from "./models/restaurants/restaurant.ts";
-import { connect } from "./db/index.ts"
+import { connect } from "./db/index.ts";
 
 import { logger } from "./utils/logger.ts";
 import { morganMiddleware } from "./middlewares/morgan.middleware.ts";
@@ -62,51 +62,50 @@ function getToken(header: string | undefined) {
   }
 }
 
-app.get('/jwt', (req, res) => {
+app.get("/jwt", (req, res) => {
   const rcvdJwt = getToken(req.header("authorization")) ?? "";
   jwt.verify(rcvdJwt, jwtSecret, (err, decoded: any) => {
     if (err) {
       return res.status(401);
     } else {
-      res.status(200).json({name: decoded['name']});
+      res.status(200).json({ name: decoded["name"] });
     }
   });
-})
+});
 
-app.post('/jwt', (request, res) => {
+app.post("/jwt", (request, res) => {
   jwt.sign({ name: request.body.name }, jwtSecret, {
     expiresIn: "1d",
   }, (err, token) => {
     res.status(201).json({ token });
-  })
+  });
 });
 
-app.get('/restaurants', (req, res) => {
-  logger.info("finding restaurants")
+app.get("/restaurants", (req, res) => {
+  logger.info("finding restaurants");
   Restaurant.find()
-  .then((restaurants) => {
-    logger.info("found")
-    res.status(200).json(restaurants);
-  })
-  .catch((e) => {
-    logger.info("error: "+e)
-    res.status(500);
-  });
-})
+    .then((restaurants) => {
+      logger.info("found");
+      res.status(200).json(restaurants);
+    })
+    .catch((e) => {
+      logger.info("error: " + e);
+      res.status(500);
+    });
+});
 
-app.get('/contacts', (req, res) => {
-  logger.info("finding contacts")
+app.get("/contacts", (req, res) => {
+  logger.info("finding contacts");
   Contact.find()
-  .then((contacts) => {
-    logger.info("found")
-    res.status(200).json(contacts);
-  })
-  .catch((e) => {
-    logger.info("error: "+e)
-    res.status(500);
-  });
-})
-
+    .then((contacts) => {
+      logger.info("found");
+      res.status(200).json(contacts);
+    })
+    .catch((e) => {
+      logger.info("error: " + e);
+      res.status(500);
+    });
+});
 
 app.on("ready", () => {
   app.listen(port, () => {

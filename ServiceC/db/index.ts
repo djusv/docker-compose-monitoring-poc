@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { logger } from "../utils/logger.ts";
+import mongoose from "npm:mongoose@7.3.4";
+import { Logger } from "../utils/logger.ts";
 
 export function connect(app: any) {
   const options = {
@@ -11,21 +11,17 @@ export function connect(app: any) {
   };
 
   const connectWithRetry = () => {
-    logger.info("MongoDB connection with retry");
+    Logger.info("MongoDB connection with retry");
     const uri = Deno.env.get("MONGODB_URI") ||
       "mongodb://localhost:27017/sample_db";
     mongoose
       // @ts-ignore
       .connect(uri, options)
       .then(() => {
-        logger.info(`MongoDB is connected to ${uri}`);
-        app.emit("ready");
+        Logger.info(`MongoDB is connected to ${uri}`);
       })
       .catch((err: any) => {
-        logger.info(
-          "MongoDB connection unsuccessful, retry after 2 seconds.",
-          err,
-        );
+        Logger.info("MongoDB connection unsuccessful, retry after 2 seconds.");
         setTimeout(connectWithRetry, 2000);
       });
   };
